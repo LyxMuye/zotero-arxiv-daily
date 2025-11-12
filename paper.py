@@ -69,6 +69,10 @@ class ArxivPaper:
         with ExitStack() as stack:
             tmpdirname = stack.enter_context(TemporaryDirectory())
             # file = self._paper.download_source(dirpath=tmpdirname)
+            # 添加检查：如果 pdf_url 为 None，直接返回 None
+            if self._paper.pdf_url is None:
+                logger.warning(f"PDF URL for {self.arxiv_id} is None. Cannot download source.")
+                return None
             try:
                 # 尝试下载源文件
                 file = self._paper.download_source(dirpath=tmpdirname)
